@@ -1,0 +1,176 @@
+{
+  "$version": "2.3.0",
+  "$metadata": {
+    "figmaFile": "DJBpjoXPMEw6bBAByIQaAy",
+    "description": "Maps component names to Figma node IDs and implementation details"
+  },
+  "components": {
+    "Button": {
+      "figmaNodeId": "1:100",
+      "variants": ["primary", "secondary", "ghost", "danger", "link"],
+      "sizes": ["sm", "md", "lg"],
+      "states": ["default", "hover", "active", "disabled", "loading"],
+      "tokens": {
+        "background": "semantic.brand.primary",
+        "text": "semantic.text.inverse",
+        "border": "semantic.border.default",
+        "radius": "primitives.radius.md"
+      },
+      "tailwindClasses": "btn btn-primary",
+      "shadcnComponent": "Button"
+    },
+    "Input": {
+      "figmaNodeId": "1:200",
+      "variants": ["default", "error", "success", "disabled"],
+      "sizes": ["sm", "md", "lg"],
+      "states": ["default", "focus", "filled", "error", "disabled"],
+      "tokens": {
+        "background": "semantic.surface.default",
+        "border": "semantic.border.default",
+        "borderFocus": "semantic.border.focus",
+        "borderError": "semantic.border.error",
+        "text": "semantic.text.primary",
+        "placeholder": "semantic.text.disabled",
+        "radius": "primitives.radius.md"
+      },
+      "tailwindClasses": "input",
+      "shadcnComponent": "Input"
+    },
+    "Badge": {
+      "figmaNodeId": "1:300",
+      "variants": ["default", "success", "warning", "error", "info", "outline"],
+      "sizes": ["sm", "md"],
+      "tokens": {
+        "successBg": "semantic.status.success",
+        "warningBg": "semantic.status.warning",
+        "errorBg": "semantic.status.error",
+        "infoBg": "semantic.status.info",
+        "radius": "primitives.radius.full"
+      },
+      "shadcnComponent": "Badge"
+    },
+    "Card": {
+      "figmaNodeId": "1:400",
+      "variants": ["default", "outlined", "elevated"],
+      "tokens": {
+        "background": "semantic.surface.default",
+        "border": "semantic.border.default",
+        "radius": "primitives.radius.lg",
+        "shadow": "primitives.shadow.md"
+      },
+      "shadcnComponent": "Card"
+    },
+    "Modal": {
+      "figmaNodeId": "1:500",
+      "variants": ["default", "wide", "fullscreen"],
+      "tokens": {
+        "background": "semantic.surface.default",
+        "overlay": "semantic.surface.overlay",
+        "border": "semantic.border.default",
+        "radius": "primitives.radius.xl"
+      },
+      "shadcnComponent": "Dialog"
+    },
+    "Select": {
+      "figmaNodeId": "1:600",
+      "variants": ["default", "error", "disabled"],
+      "tokens": {
+        "background": "semantic.surface.default",
+        "border": "semantic.border.default",
+        "text": "semantic.text.primary",
+        "radius": "primitives.radius.md"
+      },
+      "shadcnComponent": "Select"
+    },
+    "Checkbox": {
+      "figmaNodeId": "1:700",
+      "variants": ["unchecked", "checked", "indeterminate", "disabled"],
+      "tokens": {
+        "border": "semantic.border.default",
+        "checkedBg": "semantic.brand.primary",
+        "radius": "primitives.radius.sm"
+      },
+      "shadcnComponent": "Checkbox"
+    },
+    "Toggle": {
+      "figmaNodeId": "1:800",
+      "variants": ["off", "on", "disabled"],
+      "tokens": {
+        "offBg": "semantic.neutral.300",
+        "onBg": "semantic.brand.primary",
+        "thumb": "semantic.surface.default"
+      },
+      "shadcnComponent": "Switch"
+    },
+    "Alert": {
+      "figmaNodeId": "1:900",
+      "variants": ["info", "success", "warning", "error"],
+      "tokens": {
+        "infoBg": "primitives.colors.blue.50",
+        "successBg": "primitives.colors.green.50",
+        "warningBg": "primitives.colors.yellow.50",
+        "errorBg": "primitives.colors.red.50"
+      },
+      "shadcnComponent": "Alert"
+    },
+    "Avatar": {
+      "figmaNodeId": "1:1000",
+      "variants": ["image", "initials", "icon"],
+      "sizes": ["xs", "sm", "md", "lg", "xl"],
+      "tokens": {
+        "background": "semantic.surface.muted",
+        "radius": "primitives.radius.full"
+      },
+      "shadcnComponent": "Avatar"
+    },
+    "Tooltip": {
+      "figmaNodeId": "1:1100",
+      "variants": ["default", "info"],
+      "tokens": {
+        "background": "semantic.surface.overlay",
+        "text": "semantic.text.inverse",
+        "radius": "primitives.radius.md"
+      },
+      "shadcnComponent": "Tooltip"
+    },
+    "Table": {
+      "figmaNodeId": "1:1200",
+      "variants": ["default", "striped", "compact"],
+      "tokens": {
+        "headerBg": "semantic.surface.subtle",
+        "rowBg": "semantic.surface.default",
+        "stripedBg": "semantic.surface.muted",
+        "border": "semantic.border.default",
+        "text": "semantic.text.primary"
+      }
+    },
+    "Tabs": {
+      "figmaNodeId": "1:1300",
+      "variants": ["default", "pills", "underline"],
+      "tokens": {
+        "activeColor": "semantic.brand.primary",
+        "inactiveColor": "semantic.text.secondary",
+        "activeBorder": "semantic.brand.primary"
+      },
+      "shadcnComponent": "Tabs"
+    },
+    "Breadcrumb": {
+      "figmaNodeId": "1:1400",
+      "tokens": {
+        "activeColor": "semantic.text.primary",
+        "inactiveColor": "semantic.text.secondary",
+        "linkColor": "semantic.text.brand"
+      },
+      "shadcnComponent": "Breadcrumb"
+    },
+    "Pagination": {
+      "figmaNodeId": "1:1500",
+      "tokens": {
+        "activeBg": "semantic.brand.primary",
+        "activeText": "semantic.text.inverse",
+        "border": "semantic.border.default",
+        "radius": "primitives.radius.md"
+      }
+    }
+  }
+}
