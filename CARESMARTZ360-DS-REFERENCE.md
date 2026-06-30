@@ -1,9 +1,9 @@
 # CareSmartz360 Design System — AI Handoff Reference
 
-**Version:** 2.4.0
-**Figma File:** `$-Primitives (CS360) V2.0` (ID: `DJBpjoXPMEw6bBAByIQaAy`)
-**Last Updated:** 2026-06-30
-**Stack:** Angular 19 + Tailwind CSS + SCSS
+**Version:** 2.5.0  
+**Figma File:** `$-Primitives (CS360) V2.0` (**ID:** `DJBpjoXPMEw6bBAByIQaAy`)  
+**Last Updated:** 2026-06-30  
+**Stack:** Angular 19 + **Angular Material M3** + Tailwind CSS + SCSS
 
 ---
 
@@ -11,21 +11,47 @@
 
 This document serves as the authoritative reference for AI-assisted development, design handoff, and component implementation for the CareSmartz360 product design system.
 
-**Stack (v2.4.0 Breaking Change):**
-- Framework: Angular 19 standalone components ONLY
-- Styling: Tailwind CSS + SCSS (NO React, NO Angular Material, NO inline styles)
-- Icons: Google Material Symbols Rounded ONLY
-- Tokens: Always via CSS custom properties `var(--color-*)` — never hardcoded
+**Stack (v2.5.0 CORRECTED):**
+
+| Layer | Technology | Priority |
+|-------|-----------|----------|
+| Framework | Angular 19 (standalone components) | Required |
+| **Component Library** | **Angular Material M3** | **PRIMARY — use on priority** |
+| Utility CSS | Tailwind CSS | Layout, spacing utilities |
+| Component Styling | SCSS + CSS custom properties | Token-based overrides |
+| Icons | Google Material Symbols Rounded | Required |
+| Fonts | Inter (base), JetBrains Mono (code) | Required |
+| ❌ Prohibited | React, Next.js, Vue, shadcn/ui, PrimeNG | Never use |
+| ❌ Prohibited | Hardcoded hex values, inline styles | Never use |
+
+### How the layers work together
+
+```
+Angular Material M3
+  → provides: component structure, accessibility, interaction patterns
+  → override: theming via CSS custom properties (not M3 theme object)
+
+Tailwind CSS
+  → provides: layout (flex, grid, gap), display utilities
+  → do NOT use for color/spacing/radius — use tokens instead
+
+SCSS + CSS custom properties
+  → provides: all token-based values (color, spacing, radius, shadow)
+  → maps Figma variables → --css-custom-properties
+
+Rule: Tailwind for layout. SCSS tokens for visual styling. Angular Material for components.
+```
 
 ---
 
 ## Token Architecture
 
 ### Layer 1: Primitives
+
 Foundational raw values. Never reference primitives directly in components — always use semantic tokens.
 
 | Category | Example Token | Value |
-|----------|--------------|-------|
+|----------|---------------|-------|
 | Color | `primitives.colors.blue.600` | `#2563EB` |
 | Spacing | `primitives.spacing.4` | `16px` |
 | Typography | `primitives.typography.fontSize.base` | `14px` |
@@ -33,163 +59,219 @@ Foundational raw values. Never reference primitives directly in components — a
 | Shadow | `primitives.shadow.md` | `0 4px 6px rgba(0,0,0,0.1)` |
 
 ### Layer 2: Semantic Tokens
+
 Meaning-based tokens referencing primitives.
 
 | Token | References | Usage |
-|-------|-----------|-------|
+|-------|------------|-------|
 | `semantic.brand.primary` | `blue.600` | Primary CTA buttons |
 | `semantic.brand.hover` | `blue.700` | Button hover state |
 | `semantic.brand.disabled` | `gray.300` | Disabled interactive elements |
 | `semantic.status.success` | `green.600` | Success states, positive feedback |
 | `semantic.status.warning` | `yellow.500` | Warning states, caution |
 | `semantic.status.error` | `red.600` | Error states, destructive actions |
-| `semantic.status.info` | `blue.600` | Informational states |
+| `semantic.status.info` | `blue.700` | Info states |
+| `semantic.text.primary` | `gray.00` | Disabled text |
 | `semantic.surface.default` | `white` | Main content areas |
-| `semantic.surface.subtle` | `gray.50` | Subtle backgrounds |
-| `semantic.surface.muted` | `gray.100` | Muted/secondary surfaces |
-| `semantic.surface.overlay` | `gray.800` | Modal overlays, tooltips |
-| `semantic.text.primary` | `gray.900` | Body text, headings |
-| `semantic.text.secondary` | `gray.600` | Secondary text, labels |
-| `semantic.text.disabled` | `gray.400` | Disabled text |
-| `semantic.text.inverse` | `white` | Text on dark/colored backgrounds |
-| `semantic.text.brand` | `blue.600` | Links, brand text |
-| `semantic.border.default` | `gray.200` | Standard borders |
-| `semantic.border.strong` | `gray.400` | Emphasized borders |
-| `semantic.border.focus` | `blue.500` | Focus rings |
-| `semantic.border.error` | `red.500` | Error state borders |
-| `semantic.icon.library` | `material-symbols-rounded` | Icon font library |
 
 ---
 
-## CSS Custom Property Map
+## Angular Material M3 Theme Setup
 
-All semantic tokens map to SCSS CSS custom properties:
+Angular Material M3 is the **primary component library**. Override its CSS custom properties using CareSmartz360 token values.
+
+### Installation
+
+```bash
+npm install @angular/material @angular/cdk
+```
+
+### Material Theme Overrides
+
+Create `_material-theme-overrides.scss`:
 
 ```scss
-// Brand
---color-brand-primary:   #2563EB;
---color-brand-secondary: #DBEAFE;
---color-brand-hover:     #1D4ED8;
---color-brand-active:    #1E40AF;
---color-brand-disabled:  #D1D5DB;
+// Override Angular Material M3 using CareSmartz360 tokens
 
-// Status
---color-status-success: #16A34A;
---color-status-warning: #EAB308;
---color-status-error:   #DC2626;
---color-status-info:    #2563EB;
+.mat-mdc-button.mat-primary {
+  --mdc-filled-button-container-color:      var(--action-primary-bg);
+  --mdc-filled-button-label-text-color:     var(--action-primary-text-neutral);
+  --mdc-filled-button-hover-container-color:var(--action-primary-hover);
+  --mdc-filled-button-pressed-container-color: var(--action-primary-pressed);
+}
 
-// Surface
---color-surface-default: #FFFFFF;
---color-surface-subtle:  #F9FAFB;
---color-surface-muted:   #F3F4F6;
---color-surface-overlay: #1F2937;
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-outlined-button-outline-color:      var(--action-secondary-border);
+  --mdc-outlined-button-label-text-color:   var(--action-secondary-text);
+}
 
-// Text
---color-text-primary:   #111827;
---color-text-secondary: #4B5563;
---color-text-disabled:  #9CA3AF;
---color-text-inverse:   #FFFFFF;
---color-text-brand:     #2563EB;
+.mat-mdc-form-field {
+  --mdc-outlined-text-field-outline-color:        var(--field-border-default);
+  --mdc-outlined-text-field-focus-outline-color:  var(--field-border-focus);
+  --mdc-outlined-text-field-error-outline-color:  var(--field-border-danger);
+  --mdc-outlined-text-field-input-text-color:     var(--field-value-primary);
+  --mdc-outlined-text-field-placeholder-color:    var(--field-value-placeholder);
+  --mdc-outlined-text-field-disabled-outline-color: var(--border-subtle);
+  --mdc-outlined-text-field-container-shape:      var(--radius-lg);
+}
 
-// Border
---color-border-default: #E5E7EB;
---color-border-strong:  #9CA3AF;
---color-border-focus:   #3B82F6;
---color-border-error:   #EF4444;
+.mat-mdc-checkbox {
+  --mdc-checkbox-selected-checkmark-color:         var(--action-primary-text-neutral);
+  --mdc-checkbox-selected-focus-icon-color:        var(--action-primary-bg);
+  --mdc-checkbox-selected-hover-icon-color:        var(--action-primary-hover);
+  --mdc-checkbox-selected-icon-color:              var(--action-primary-bg);
+  --mdc-checkbox-selected-pressed-icon-color:      var(--action-primary-pressed);
+  --mdc-checkbox-unselected-hover-icon-color:      var(--border-medium);
+  --mdc-checkbox-unselected-icon-color:            var(--border-medium);
+}
+
+.mat-mdc-chip {
+  --mdc-chip-label-text-color:       var(--text-secondary);
+  --mdc-chip-elevated-container-color: var(--surface-secondary);
+  --mdc-chip-outline-color:          var(--border-subtle);
+  --mdc-chip-container-shape-radius: var(--radius-full);
+}
+
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: var(--surface-base);
+  --mdc-elevated-card-container-shape: var(--radius-xl);
+}
+
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: var(--surface-base);
+  --mdc-dialog-container-shape: var(--radius-xl);
+}
+
+.mat-mdc-tooltip {
+  --mdc-plain-tooltip-container-color: var(--tool-tip-bg);
+  --mdc-plain-tooltip-supporting-text-color: var(--tool-tip-text);
+}
+
+.mat-mdc-select {
+  --mdc-outlined-text-field-outline-color:       var(--field-border-default);
+  --mdc-outlined-text-field-focus-outline-color: var(--field-border-focus);
+}
+
+.mat-typography {
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-body-base);
+  color: var(--text-primary);
+}
+```
+
+### Icon Setup
+
+```html
+<!-- index.html -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+```
+
+```typescript
+// icon usage
+import { MatIconModule } from '@angular/material/icon';
+
+@Component({
+  imports: [MatIconModule],
+  template: `
+    <mat-icon fontSet="material-symbols-rounded">filter_list</mat-icon>
+  `
+})
 ```
 
 ---
 
-## Component Specifications
+## Component Patterns
 
-### Button
+### Button (Angular Material M3)
 
-| Variant | Background | Text | Hover | Min Height |
-|---------|-----------|------|-------|------------|
-| Primary | `var(--color-brand-primary)` | `var(--color-text-inverse)` | `var(--color-brand-hover)` | 40px |
-| Secondary | `var(--color-surface-subtle)` | `var(--color-brand-primary)` | `var(--color-surface-muted)` | 40px |
-| Ghost | transparent | `var(--color-text-primary)` | `var(--color-surface-muted)` | 40px |
-| Destructive | `#EF4444` | `var(--color-text-inverse)` | `#DC2626` | 40px |
-| Disabled | `var(--color-brand-disabled)` | `var(--color-text-disabled)` | none | 40px |
+```typescript
+import { Component, Input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
-Angular 19 component selector: `cs-button`
-Icon: `<span class="material-symbols-rounded">icon_name</span>`
+@Component({
+  selector: 'cs-button',
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule],
+  template: `
+    <button
+      mat-flat-button
+      [color]="color"
+      [disabled]="disabled"
+      class="cs-button">
+      @if (icon) {
+        <mat-icon fontSet="material-symbols-rounded">{{ icon }}</mat-icon>
+      }
+      <span>{{ label }}</span>
+    </button>
+  `,
+  styleUrl: './button.component.scss'
+})
+export class ButtonComponent {
+  @Input() label = '';
+  @Input() icon = '';
+  @Input() color: 'primary' | 'warn' = 'primary';
+  @Input() disabled = false;
+}
+```
 
-### Input Field
+```scss
+// button.component.scss
+.cs-button {
+  min-height: 40px;
+  border-radius: var(--radius-lg) !important;
+  font-size: var(--font-size-body-base);
+  font-weight: var(--font-weight-medium);
+}
+```
 
-| State | Border | Background | Text |
-|-------|--------|-----------|------|
-| Default | `var(--color-border-default)` | `var(--color-surface-default)` | `var(--color-text-primary)` |
-| Focus | `var(--color-border-focus)` | `var(--color-surface-default)` | `var(--color-text-primary)` |
-| Error | `var(--color-border-error)` | `#FEF2F2` | `var(--color-text-primary)` |
-| Disabled | `var(--color-border-default)` | `var(--color-surface-muted)` | `var(--color-text-disabled)` |
+### Form Field (Angular Material M3)
 
-Min height: 40px. Always include `aria-label` or `aria-labelledby`.
-
-### Badge / Tag
-
-| Type | Text Color | Background |
-|------|-----------|------------|
-| Success | `var(--color-status-success)` | `#F0FDF4` |
-| Warning | `var(--color-status-warning)` | `#FEFCE8` |
-| Error | `var(--color-status-error)` | `#FEF2F2` |
-| Info | `var(--color-status-info)` | `#EFF6FF` |
-| Neutral | `var(--color-text-secondary)` | `var(--color-surface-subtle)` |
-
-### Navigation / Sidebar
-
-| Element | Color |
-|---------|-------|
-| Background | `var(--color-brand-primary)` — `#2563EB` |
-| Text | `var(--color-text-inverse)` — `#FFFFFF` |
-| Active item | `var(--color-brand-active)` |
-| Icon | `var(--color-text-inverse)` |
-| Border | `var(--color-border-default)` |
-
-### Modal / Dialog
-
-- Backdrop: `rgba(0,0,0,0.5)`
-- Surface: `var(--color-surface-default)`
-- Border radius: `var(--radius-lg)` — `8px`
-- Shadow: `var(--shadow-xl)`
-- Close button: `<span class="material-symbols-rounded">close</span>`
-- Trap focus within modal
-- `aria-modal="true"`, `role="dialog"`, `aria-labelledby`
-
----
-
-## Spacing Scale
-
-| Token | Value | Tailwind Class |
-|-------|-------|----------------|
-| spacing.0 | 0px | `p-0` |
-| spacing.1 | 4px | `p-1` |
-| spacing.2 | 8px | `p-2` |
-| spacing.3 | 12px | `p-3` |
-| spacing.4 | 16px | `p-4` |
-| spacing.5 | 20px | `p-5` |
-| spacing.6 | 24px | `p-6` |
-| spacing.8 | 32px | `p-8` |
-| spacing.10 | 40px | `p-10` |
-| spacing.12 | 48px | `p-12` |
+```html
+<mat-form-field appearance="outline" class="cs-field w-full">
+  <mat-label>{{ label }}</mat-label>
+  <input matInput [placeholder]="placeholder" [formControl]="control"/>
+  @if (hint) {
+    <mat-hint>{{ hint }}</mat-hint>
+  }
+  @if (control.hasError('required')) {
+    <mat-error>This field is required</mat-error>
+  }
+</mat-form-field>
+```
 
 ---
 
-## Typography Scale
+## Typography
 
-| Role | Size | Weight | Tailwind |
-|------|------|--------|----------|
-| Display | 36px | 600 | `text-4xl font-semibold` |
-| Heading 1 | 32px | 600 | `text-3xl font-semibold` |
-| Heading 2 | 24px | 600 | `text-2xl font-semibold` |
-| Heading 3 | 20px | 500 | `text-xl font-medium` |
-| Heading 4 | 18px | 500 | `text-lg font-medium` |
-| Body Strong | 16px | 500 | `text-base font-medium` |
-| Body Base | 14px | 400 | `text-sm font-normal` |
-| Caption | 12px | 400 | `text-xs font-normal` |
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--font-size-display` | `36px` | Display headings |
+| `--font-size-heading-1` | `32px` | Page titles |
+| `--font-size-heading-2` | `24px` | Section headings |
+| `--font-size-heading-3` | `20px` | Subsection headings |
+| `--font-size-body-strong` | `16px` | Emphasized body |
+| `--font-size-body-base` | `14px` | Default text |
+| `--font-size-caption` | `12px` | Small labels |
+| `--font-weight-regular` | `400` | Regular text |
+| `--font-weight-medium` | `500` | Emphasized text |
+| `--font-weight-semibold` | `600` | Subheadings |
 
-Font family: Inter (sans-serif)
+---
+
+## Spacing (Real Figma Values)
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `--spacing-xs` | `2px` | Tight spacing |
+| `--spacing-sm` | `4px` | Small gaps |
+| `--spacing-md` | `8px` | Default spacing |
+| `--spacing-lg` | `12px` | Large gaps |
+| `--spacing-xl` | `16px` | Section spacing |
+| `--spacing-2xl` | `20px` | Major sections |
+| `--spacing-3xl` | `24px` | Large sections |
+| `--spacing-4xl` | `32px` | Container spacing |
 
 ---
 
@@ -197,41 +279,33 @@ Font family: Inter (sans-serif)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| radius.none | 0px | Sharp corners |
-| radius.sm | 2px | Subtle rounding |
-| radius.md | 4px | Default — inputs, cards |
-| radius.lg | 8px | Buttons, modals |
-| radius.xl | 12px | Cards, panels |
-| radius.2xl | 16px | Large cards |
-| radius.full | 9999px | Pills, badges, avatars |
+| `--radius-sm` | `2px` | Sharp corners |
+| `--radius-base` | `4px` | Buttons, inputs |
+| `--radius-md` | `6px` | Small cards |
+| `--radius-lg` | `8px` | Cards, dialogs |
+| `--radius-xl` | `12px` | Large modals |
+| `--radius-2xl` | `16px` | Large containers |
+| `--radius-full` | `9999px` | Pills, avatars |
 
 ---
 
 ## Accessibility Standards
 
-| Requirement | Standard | Implementation |
-|-------------|----------|----------------|
-| Color contrast | WCAG AA 4.5:1 | Enforced via semantic token pairs |
-| Touch target | Min 40×40px | `min-h-touch` Tailwind class |
-| Focus indicator | Visible 2px ring | `focus-visible:ring-2 ring-border-focus` |
-| Screen reader | Full ARIA | `aria-label`, `aria-describedby`, `role` |
-| Keyboard nav | Full support | `Tab`, `Enter`, `Space`, `Escape` |
+✅ **WCAG AA Compliant** — All color pairs meet 4.5:1 contrast ratio  
+✅ **Focus Indicators** — Visible 2px ring via Angular Material  
+✅ **Touch Targets** — Minimum 40px × 40px for all clickable areas  
+✅ **Screen Readers** — `aria-` attributes provided by Material  
 
 ---
 
-## Figma File Reference
+## Related Files
 
-| File | Figma ID | Contents |
-|------|----------|----------|
-| Primitives | `DJBpjoXPMEw6bBAByIQaAy` | Color ramps, spacing, typography |
-| Agency DS | `4bh29laapcuKBTghfaRXF0` | Component library, semantic layer |
+- **Token Manifest:** `ds-tokens-v2.5.0.json`
+- **Material Overrides:** `_material-theme-overrides.scss`
+- **Agency Tokens:** `design-tokens/agency-styles.scss`
+- **Tailwind Config:** `tailwind.config.js`
+- **AI Guide:** `AI-TOOLS-GUIDE.md`
 
 ---
 
-## Version
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 2.4.0 | 2026-06-30 | Angular 19 stack migration. Removed React/shadcn/Angular Material. Added icon token group, SCSS-only constraint, touch target enforcement. |
-| 2.3.0 | 2025-01-01 | Full 3-tier token architecture, Tailwind CSS v4 integration |
-| 2.0.0 | 2024-06-01 | Initial structured reference |
+**For questions or updates, contact the Design System team.**
